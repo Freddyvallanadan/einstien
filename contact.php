@@ -1,41 +1,27 @@
-<?php
-if($_POST["mail"]!="") { 
-	$name = $_POST["name"];
-	$email = $_POST["email"];
-	$phone = $_POST["phone"];
-	$message = $_POST["message"];
-	$check = 0;
-	$name = preg_replace("/[^a-zA-Z\s]/", "", $name);
-	if (empty($name)) {
-		$msg= "<span style=color:red>Please enter your name.</span>";
-		$check = 1;
-	}else{	
-		if (empty($email)) {
+<?php if(isset($_GET['c'])){
+	$c=$_GET['c'];
+	switch ($c) {
+		case "1":
+			$msg= "<span style=color:red>Please enter your name.</span>";
+			break;
+		case "2":
 			$msg= "<span style=color:red>Please enter your email.</span>";
-			$check = 2;
-		}else{
-			if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				$msg= "<span style=color:red>Please enter a valid email address.</span>";
-				$check = 3;
-			}else{
-				if (empty($message)) {
-					$msg= "<span style=color:red>Please enter your message to us.</span>";
-					$check = 4;
-				}else{
-					$to = filter_var("injustin@live.in", FILTER_SANITIZE_EMAIL);
-					$subjects = "New Message - $name Contact $phone";
-					$msgs = "$message";
-					$from = "$email";
-					$headers = "From:" . $from;
-					mail($to,$subjects,$msgs,$headers);
-					session_unset();
-					session_destroy();
-					$msg= "<span style=color:green>Thank you for contacting us, we will get back to you shortly.</span>";
-					$check = 5;
-				}
-			}
-		}
+			break;
+		case "3":
+			$msg= "<span style=color:red>Please enter a valid email address.</span>";
+			break;
+		case "4":
+			$msg= "<span style=color:red>Please enter your message to us.</span>";
+			break;
+		case "5":
+			$msg= "<span style=color:green>Thank you for contacting us, we will get back to you shortly.</span>";
+			break;
+		default:
+			$msg="";
+			break;
 	}
+}else{
+	$c=0;
 }
 ?>
 <!DOCTYPE html>
@@ -76,11 +62,11 @@ if($_POST["mail"]!="") {
         </div>
         <div class="contact-form">
             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-            <?php if($check != 0 && $_POST["mail"]!= "") { 
+            <?php if($c != 0) { 
 						echo $msg;
 				} ?>
-				<?php if($check < 5 ) { ?> 
-            <form action="contact.php" method="post" name="contact-form">
+				<?php if($c < 5 ) { ?> 
+            <form action="send.php" method="post" name="contact-form">
 		
 		<p class="name">
 			<input type="text" name="name" id="name" placeholder="Name" />
@@ -102,6 +88,7 @@ if($_POST["mail"]!="") {
 			<input type="submit"  name="mail" value="Send Message"/>
 		</p>
 	</form>
+	<?php }?>
         </div>
     <div class="clearBoth"></div>
     <div class="push"></div>
