@@ -19,10 +19,8 @@ if(isset($_POST["mail"])) {
 					$check = 4;
 				}else{
 					$to = filter_var("freddyvallanadan@gmail.com", FILTER_SANITIZE_EMAIL);
-					$subjects = "New Message - $name Contact $phone";
-					$msgs = "$message";
-					$from = "$email";
-					$headers = "From:" . $from;
+					$subjects = "New Message - ".$name." Contact ".$phone;
+					$msgs =  filter_var($message, FILTER_SANITIZE_STRING);
 					mail($to,$subjects,$msgs,$headers);
 					$check = 5;
 				}
